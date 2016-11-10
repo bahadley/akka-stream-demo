@@ -14,7 +14,7 @@ libraryDependencies ++= {
     "com.typesafe.akka"       %% "akka-slf4j"               % akkaVersion,
     "com.typesafe.akka"       %% "akka-stream"              % akkaVersion,
     "com.typesafe.slick"      %% "slick"                    % slickVersion,
-    "com.typesafe.slick"      %  "slick-hikaricp_2.11"      % slickVersion, 
+    "com.typesafe.slick"      %% "slick-hikaricp"           % slickVersion, 
     "com.h2database"          %  "h2"                       % "1.4.192",
     "ch.qos.logback"          %  "logback-classic"          % "1.1.7"
   )
