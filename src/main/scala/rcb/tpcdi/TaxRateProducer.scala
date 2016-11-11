@@ -32,6 +32,6 @@ class Producer extends ActorPublisher[TaxRate] with ActorLogging {
   def nextTaxRate(): TaxRate = {
     TaxRate("US1", 
       "U.S. Income Tax Bracket for the poor", 
-      rnd.nextDouble() * 100)    
+      (math floor rnd.nextDouble() * 1E5) / 1E5)
   }   
 }
