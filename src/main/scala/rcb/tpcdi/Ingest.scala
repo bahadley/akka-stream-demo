@@ -1,8 +1,7 @@
 package rcb.tpcdi 
 
 import akka.actor.{ActorLogging, Props}
-import akka.pattern.CircuitBreaker
-import akka.stream.actor.{ActorSubscriber, OneByOneRequestStrategy, WatermarkRequestStrategy}
+import akka.stream.actor.{ActorSubscriber, WatermarkRequestStrategy}
 import akka.stream.actor.ActorSubscriberMessage._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
@@ -15,8 +14,7 @@ import slick.driver.H2Driver.api._
 class Ingest extends ActorSubscriber with ActorLogging {
   import context.dispatcher
 
-  override val requestStrategy = OneByOneRequestStrategy
-  //override val requestStrategy = WatermarkRequestStrategy(50)
+  override val requestStrategy = WatermarkRequestStrategy(50)
 
   implicit val timeout = Timeout(2 seconds)
 
@@ -48,7 +46,7 @@ class Ingest extends ActorSubscriber with ActorLogging {
         case None => 
           throw new NullPointerException(ERR_MSG_DB) 
         case Some(db) => 
-          Await.result(cb.withCircuitBreaker(db.run(insertTx(tr))), timeout.duration)
+          Await.result(cb.guard(db.run(insertTx(tr))), timeout.duration)
           //cb.withCircuitBreaker(db.run(insertTx(tr))) onFailure { 
           //  case _ => log.error("Persistence failed")
           //}
